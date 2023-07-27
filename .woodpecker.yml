@@ -1,0 +1,50 @@
+pipeline:
+  tests:
+    image: python:3.9
+    commands:
+      - echo done
+  notify-sucess:
+    image: plugins/matrix
+    settings:
+      home_server: https://matrix.org
+      roomid: "!geRsLIMWJcBEVygYcj:matrix.org"
+      username:
+        from_secret: matrix_user
+      password:
+        from_secret: matrix_password
+    template: >
+      PikPukPak.. TODO BIEN
+      <p>CI_BUILD_NUMBER ${CI_BUILD_NUMBER}</p>
+      <p>CI_BUILD_STATUS ${CI_BUILD_STATUS}</p>
+      <p>CI JOB STATUS ${CI_JOB_STATUS}</p>
+      <p>CI_COMMIT_URL ${CI_COMMIT_URL}</p>
+      <p>CI_REPO_LINK ${CI_REPO_LINK}</p>
+      <p>CI_COMMIT_LINK ${CI_COMMIT_LINK}</p>
+      <p>CI_PIPELINE_STATUS ${CI_PIPELINE_STATUS}</p>
+      <p>${CI_COMMIT_AUTHOR}: <a href="${CI_COMMIT_URL}">${CI_REPO}/{{build.branch}}#{{truncate build.commit 8}}</a><b>{{build.status}}</b></p>
+      <pre>${CI_COMMIT_MESSAGE}</pre>
+    when:
+      status: [ success ]
+
+  notify-failure:
+    image: plugins/matrix
+    settings:
+      home_server: https://matrix.org
+      roomid: "!geRsLIMWJcBEVygYcj:matrix.org"
+      username:
+        from_secret: matrix_user
+      password:
+        from_secret: matrix_password
+    template: >
+      PikPukPak..
+      <p>CI_BUILD_NUMBER ${CI_BUILD_NUMBER}</p>
+      <p>CI_BUILD_STATUS ${CI_BUILD_STATUS}</p>
+      <p>CI JOB STATUS ${CI_JOB_STATUS}</p>
+      <p>CI_COMMIT_URL ${CI_COMMIT_URL}</p>
+      <p>CI_REPO_LINK ${CI_REPO_LINK}</p>
+      <p>CI_COMMIT_LINK ${CI_COMMIT_LINK}</p>
+      <p>CI_PIPELINE_STATUS ${CI_PIPELINE_STATUS}</p>
+      <p>${CI_COMMIT_AUTHOR}: <a href="${CI_COMMIT_URL}">${CI_REPO}/{{build.branch}}#{{truncate build.commit 8}}</a><b>{{build.status}}</b></p>
+      <pre>${CI_COMMIT_MESSAGE}</pre>
+    when:
+      status: [ failure ]
